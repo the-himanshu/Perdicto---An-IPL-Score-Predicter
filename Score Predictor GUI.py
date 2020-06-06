@@ -32,6 +32,7 @@ from sklearn.ensemble import RandomForestRegressor
 reg = RandomForestRegressor(n_estimators=20)
 reg.fit(x_train,y_train)
 
+#Program Logic
 def predict_score() :
     global enter_venue,enter_bat,enter_field,enter_curr,enter_wick,enter_ovr,enter_r5,enter_w5,enter_b1,enter_b2
     venue = enter_venue.get()
@@ -45,21 +46,26 @@ def predict_score() :
     bat1 = enter_b1.get()
     bat2 = enter_b2.get()
     
-    if len(overs)<3 :
-        overs=overs+'.0'
+    try :
+        if len(overs)<3 :
+            overs=overs+'.0'
 
-    overs=overs.split('.')
-    overs=int(overs[0])*6+int(overs[1])
-    overs=120-overs
-    
-    data1 = le1.transform([venue])
-    data2 = le2.transform([team1])
-    data3 = le3.transform([team2])
-    final = reg.predict(sc.transform([[data1, data2, data3, curr_score, wickets, overs, runs_last_5, wick_last_5, bat1, bat2]]))
+        overs=overs.split('.')
+        overs=int(overs[0])*6+int(overs[1])
+        overs=120-overs
+        
+        data1 = le1.transform([venue])
+        data2 = le2.transform([team1])
+        data3 = le3.transform([team2])
+        final = reg.predict(sc.transform([[data1, data2, data3, curr_score, wickets, overs, runs_last_5, wick_last_5, bat1, bat2]]))
+    except :
+        string = 'Some error occured.. Please Check your values'
+        label_final=Label(text=string,bg="white",font=('Century Schoolbook',14,'bold'))
+        label_final.place(x=65,y=705,height=50,width=500)
     string = 'The Projected Final Score is = ' + str(int(final[0]))
     
     label_final=Label(text=string,bg="white",font=('Century Schoolbook',14,'bold'))
-    label_final.place(x=75,y=717,height=50,width=450)
+    label_final.place(x=75,y=705,height=50,width=450)
 
 
 
